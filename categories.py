@@ -19,7 +19,8 @@ CATEGORIES_THAT_GO_AT_THE_TOP = [
     "ci",
     "tests",
     "docs",
-    "commonclientbizhawkclient",
+    "commonclient",
+    "bizhawkclient",
     "ger",
     "launcher",
 ]
