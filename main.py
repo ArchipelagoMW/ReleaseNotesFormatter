@@ -20,7 +20,7 @@ def clean_line(line: str) -> str:
 
     line_after_star = re.sub(r"^\[(( *[0-9a-zA-Z':\-])+)]", r"\1SPLITHERE", line_after_star)
     if "SPLITHERE" not in line_after_star or line_after_star.index("SPLITHERE") > 30:
-        line_after_star = re.sub(r"^(( *[0-9a-zA-Z':\-])+)\s*-", r"\1SPLITHERE", line_after_star)
+        line_after_star = re.sub(r"^(( *[0-9a-zA-Z':\-])+)\s-\s", r"\1SPLITHERE", line_after_star)
     if "SPLITHERE" not in line_after_star or line_after_star.index("SPLITHERE") > 30:
         line_after_star = re.sub(r"^(( *[0-9a-zA-Z':\-])+)\s*:", r"\1SPLITHERE", line_after_star)
 
@@ -103,7 +103,8 @@ def reorder_file(infile: TextIO, outfile: TextIO):
     if lines_per_category:
         outfile.write("## Game Updates\n\n")
 
-        for category, lines in lines_per_category.items():
+        for category in sorted(lines_per_category):
+            lines = lines_per_category[category]
             write_category_lines(most_common_capitalisation_per_category[category], lines)
 
     # Leave end unchanged
