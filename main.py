@@ -16,10 +16,13 @@ def clean_line(line: str) -> str:
 
     line_after_star = line[2:]
 
-    # Alternate formattings like "Game - " or "[Game]"
-    line_after_star = re.sub(r"^\[(( *[0-9a-zA-Z':\-])+)]", r"\1:", line_after_star)
-    line_after_star = re.sub(r"^(( *[0-9a-zA-Z':\-])+)\s*-", r"\1:", line_after_star)
-    line_after_star = re.sub(r"\s:[^\s]", ": ", line_after_star, 1)  # Technically dangerous, but eh
+    # Alternate formattings like "Game - " or "[Game]". Only do if it is deemed necessary.
+
+    line_after_star = re.sub(r"^\[(( *[0-9a-zA-Z':\-])+)]", r"\1SPLITHERE", line_after_star)
+    if "SPLITHERE" not in line_after_star or line_after_star.index("SPLITHERE") > 30:
+        line_after_star = re.sub(r"^(( *[0-9a-zA-Z':\-])+)\s*-", r"\1SPLITHERE", line_after_star)
+    if "SPLITHERE" not in line_after_star or line_after_star.index("SPLITHERE") > 30:
+        line_after_star = re.sub(r"^(( *[0-9a-zA-Z':\-])+)\s*:", r"\1SPLITHERE", line_after_star)
 
     line_after_star = replace_author_and_pr_url(line_after_star)
 
@@ -27,10 +30,10 @@ def clean_line(line: str) -> str:
 
 
 def split_category_and_line(line: str) -> tuple[str | None, str]:
-    if ":" not in line or line.index(":") > 30:
+    if "SPLITHERE" not in line or line.index("SPLITHERE") > 30:
         return "Unknown", line
 
-    category, line = line.split(":", 1)
+    category, line = line.split("SPLITHERE", 1)
 
     return category, line.lstrip()
 
@@ -47,12 +50,8 @@ def reorder_file(infile: TextIO, outfile: TextIO):
     capitalisations_per_category = defaultdict(Counter)
 
     for line in infile:
-        outfile.write(line)
-
         if line.startswith("## What's Changed"):
             break
-
-    outfile.write("\n")
 
     # Group lines into games/categories
 
@@ -70,6 +69,9 @@ def reorder_file(infile: TextIO, outfile: TextIO):
         line = clean_line(line)
 
         category, line = split_category_and_line(line)
+
+        line = line[0].upper() + line[1:]
+
         category = clean_category(category)
 
         category_lower = category.lower()
@@ -85,18 +87,24 @@ def reorder_file(infile: TextIO, outfile: TextIO):
 
     # Write the grouped lines by category, starting with known core categories
 
-    for start_category in CATEGORIES_THAT_GO_AT_THE_TOP:
-        if start_category not in lines_per_category:
-            continue
+    if CATEGORIES_THAT_GO_AT_THE_TOP:
+        outfile.write("## Archipelago\n\n")
 
-        write_category_lines(
-            most_common_capitalisation_per_category[start_category], lines_per_category[start_category]
-        )
+        for start_category in CATEGORIES_THAT_GO_AT_THE_TOP:
+            if start_category not in lines_per_category:
+                continue
 
-        del lines_per_category[start_category]
+            write_category_lines(
+                most_common_capitalisation_per_category[start_category], lines_per_category[start_category]
+            )
 
-    for category, lines in lines_per_category.items():
-        write_category_lines(most_common_capitalisation_per_category[category], lines)
+            del lines_per_category[start_category]
+
+    if lines_per_category:
+        outfile.write("## Game Updates\n\n")
+
+        for category, lines in lines_per_category.items():
+            write_category_lines(most_common_capitalisation_per_category[category], lines)
 
     # Leave end unchanged
 
