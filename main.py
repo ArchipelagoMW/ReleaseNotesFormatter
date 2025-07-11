@@ -18,11 +18,11 @@ def clean_line(line: str) -> str:
 
     # Alternate formattings like "Game - " or "[Game]". Only do if it is deemed necessary.
 
-    line_after_star = re.sub(r"^\[(( *[0-9a-zA-Z':\-])+)]", r"\1SPLITHERE", line_after_star)
+    line_after_star = re.sub(r"^\[(( *[0-9a-zA-Z'.:\-])+)]", r"\1SPLITHERE", line_after_star)
     if "SPLITHERE" not in line_after_star or line_after_star.index("SPLITHERE") > 30:
-        line_after_star = re.sub(r"^(( *[0-9a-zA-Z':\-])+)\s-\s", r"\1SPLITHERE", line_after_star)
+        line_after_star = re.sub(r"^(( *[0-9a-zA-Z'.:\-])+)\s-\s", r"\1SPLITHERE", line_after_star)
     if "SPLITHERE" not in line_after_star or line_after_star.index("SPLITHERE") > 30:
-        line_after_star = re.sub(r"^(( *[0-9a-zA-Z':\-])+)\s*:", r"\1SPLITHERE", line_after_star)
+        line_after_star = re.sub(r"^(( *[0-9a-zA-Z'.:\-])+)\s*:", r"\1SPLITHERE", line_after_star)
 
     line_after_star = replace_author_and_pr_url(line_after_star)
 
