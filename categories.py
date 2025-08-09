@@ -10,6 +10,10 @@ REPLACEMENTS = {
     "pokémon rb": "Pokemon Red/Blue",
     "pokemon rb": "Pokemon Red/Blue",
     "sdv": "Stardew Valley",
+    "cc": "commonclient",
+    "v6": "VVVVVV",
+    "sm": "Super Metroid",
+    "sm64": "Super Mario 64",
 }
 
 CATEGORIES_THAT_GO_AT_THE_TOP = [
@@ -23,6 +27,9 @@ CATEGORIES_THAT_GO_AT_THE_TOP = [
     "bizhawkclient",
     "ger",
     "launcher",
+    "setup",
+    "options",
+    "docker",
 ]
 
 
