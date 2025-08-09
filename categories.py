@@ -14,6 +14,7 @@ REPLACEMENTS = {
     "v6": "VVVVVV",
     "sm": "Super Metroid",
     "sm64": "Super Mario 64",
+    "witness": "The Witness",
 }
 
 CATEGORIES_THAT_GO_AT_THE_TOP = [
