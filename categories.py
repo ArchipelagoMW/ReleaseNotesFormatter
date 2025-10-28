@@ -15,6 +15,7 @@ REPLACEMENTS = {
     "sm": "Super Metroid",
     "sm64": "Super Mario 64",
     "witness": "The Witness",
+    "test": "Tests",
 }
 
 CATEGORIES_THAT_GO_AT_THE_TOP = [
@@ -25,12 +26,16 @@ CATEGORIES_THAT_GO_AT_THE_TOP = [
     "tests",
     "docs",
     "commonclient",
+    "kvui",
+    "kivy",
+    "sniclient",
     "bizhawkclient",
     "ger",
     "launcher",
     "setup",
     "options",
     "docker",
+    "pycharm",
 ]
 
 
