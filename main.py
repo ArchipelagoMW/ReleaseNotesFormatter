@@ -109,6 +109,8 @@ def reorder_file(infile: TextIO, outfile: TextIO):
 
     # Leave end unchanged
 
+    next_line = next_line.replace("made their first contribution in ", "")
+
     outfile.write(next_line)
 
     for line in infile:
